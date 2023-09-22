@@ -9,7 +9,7 @@
 * 对于一些超大topic，本身已经做过均衡（分区均匀的分布在所有broker上），不需要参与均衡。
 * 不能出现同broker不同LogDir之间的迁移，否则会触发bug [KAFKA-9087](https://issues.apache.org/jira/browse/KAFKA-9087) 导致迁移失败。
 * 同一个TopicPartition的副本应该均匀分散到不同broker。
-* prefered leader副本尽量均匀的分散到所有broker节点
+* prefered leader副本尽量均匀的分散到所有broker节点。
 
 ## 参数
 * **balancePercentage**: 允许误差范围,默认+-5%
@@ -21,6 +21,10 @@
 * 对于usage高于平均值+误差值的，循环将其replicas移出到其他LogDir，直到usage小于误差范围的上限为止。
 * 对于usage低于平均值-误差值的，循环将比其大的LogDir上的replicas移动到该LogDir上，直到usage大于误差范围的下限为止。
 * 每次移出或者移入replica时，都要判断迁移操作是否满足以上的必要条件，不满足则跳过。
+
+
+## 注意事项
+* 执行完副本迁移后，需要对移动过的分区执行prefered leader选举。
 
 ## 未来优化
 * 未考虑LogDir大小不一致的场景，后续可以将disk大小改为使用率百分比，但需要提前录入每块LogDir的总容量。
