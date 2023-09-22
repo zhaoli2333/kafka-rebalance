@@ -9,6 +9,7 @@
 * 对于一些超大topic，本身已经做过均衡（分区均匀的分布在所有broker上），不需要参与均衡。
 * 不能出现同broker不同LogDir之间的迁移，否则会触发bug [KAFKA-9087](https://issues.apache.org/jira/browse/KAFKA-9087) 导致迁移失败。
 * 同一个TopicPartition的副本应该均匀分散到不同broker。
+* prefered leader副本尽量均匀的分散到所有broker节点
 
 ## 参数
 * **balancePercentage**: 允许误差范围,默认+-5%
